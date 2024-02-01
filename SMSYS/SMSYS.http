@@ -1,0 +1,6 @@
+@SMSYS_HostAddress = http://localhost:5117
+
+GET {{SMSYS_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
