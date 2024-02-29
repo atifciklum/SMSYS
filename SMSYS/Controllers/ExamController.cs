@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace SMSYS.Controllers
 {
-    [Authorize]
+  
     [Route("api/exams")]
     [ApiController]
     public class ExamController : ControllerBase
@@ -23,7 +23,7 @@ namespace SMSYS.Controllers
             _repository = repository;
             _mapper = mapper;
         }
-        [Authorize]
+ 
         [HttpGet]
         public ActionResult<IEnumerable<Exam>> GetExams()
         {
@@ -31,6 +31,8 @@ namespace SMSYS.Controllers
 
             return Ok(_mapper.Map<IEnumerable<ExamReadDtos>>(examItems));
         }
+
+
         [Authorize]
         [HttpGet("{id}", Name = "GetExamById")]
         public ActionResult<IEnumerable<ExamReadDtos>> GetExamById(int id)
@@ -43,7 +45,7 @@ namespace SMSYS.Controllers
             return NotFound();
 
         }
-        [Authorize]
+     
         [HttpPost]
         public ActionResult<ExamReadDtos> CreateExam(ExamCreateDto examCreateDto)
         {
@@ -108,6 +110,16 @@ namespace SMSYS.Controllers
             _repository.DeleteExam(examModelFromRepo);
             _repository.SaveChanges();
             return NoContent();
+
+        }
+
+        [HttpGet("getAllStudentResultsByExamId/{id}")]
+
+        public ActionResult<IEnumerable<StudentResultDto>> getAllStudentResultsByExamId(int id)
+        {
+            var StudentResultsByExamId = _repository.getAllStudentResultsByExamId(id);
+
+            return StudentResultsByExamId.ToList();
 
         }
 

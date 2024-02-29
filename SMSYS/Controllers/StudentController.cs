@@ -24,16 +24,28 @@ namespace SMSYS.Controllers
             _mapper = mapper;
         }
 
-        [Authorize]
+
         [HttpGet]
-        public ActionResult<IEnumerable<Student>> GetStudents()
+        public ActionResult<IEnumerable<StudentReadDtos>> GetStudents()
         {
             var studentItems = _repository.GetStudents();
 
             return Ok(_mapper.Map<IEnumerable<StudentReadDtos>>(studentItems));
         }
 
-        [Authorize]
+        [HttpGet("getStudentResults")]
+       
+        public ActionResult <IEnumerable<StudentResultDto>> GetStudentResults()
+        {
+          var studentResult = _repository.GetStudentResults();
+
+            return studentResult.ToList();        
+        
+        }
+
+
+
+
         [HttpGet("{id}", Name = "GetStudentById")]
         public ActionResult<IEnumerable<StudentReadDtos>> GetStudentById(int id)
         {
@@ -46,7 +58,7 @@ namespace SMSYS.Controllers
 
         }
 
-        [Authorize]
+
         [HttpPost]
         public ActionResult<StudentReadDtos> CreateStudent(StudentCreateDto studentCreateDto)
         {
@@ -56,12 +68,12 @@ namespace SMSYS.Controllers
 
             var studentReadDtos = _mapper.Map<StudentReadDtos>(studentModel);
 
-            return CreatedAtRoute(nameof(GetStudentById), new { id = studentReadDtos.Subject_ID }, studentReadDtos);
+            return CreatedAtRoute(nameof(GetStudentById), new { id = studentReadDtos.Student_ID }, studentReadDtos);
         }
 
-        [Authorize]
+
         [HttpPut("{id}")]
-        public ActionResult UpdateStudent(int id, StudentUpdateDto studentUpdateDto) 
+        public ActionResult UpdateStudent(int id, StudentUpdateDto studentUpdateDto)
         {
             var studentModelFromRepo = _repository.GetStudentById(id);
             if (studentModelFromRepo == null)
@@ -74,12 +86,12 @@ namespace SMSYS.Controllers
             _repository.UpdateStudent(studentModelFromRepo);
             _repository.SaveChanges();
             return NoContent();
-        
+
         }
         [Authorize]
         [HttpPatch("{id}")]
 
-        public ActionResult PartialStudentUpdate(int id , JsonPatchDocument<StudentUpdateDto> patchDoc) 
+        public ActionResult PartialStudentUpdate(int id, JsonPatchDocument<StudentUpdateDto> patchDoc)
         {
             var studentModelFromRepo = _repository.GetStudentById(id);
             if (studentModelFromRepo == null)
@@ -90,7 +102,7 @@ namespace SMSYS.Controllers
 
             var studentToPatch = _mapper.Map<StudentUpdateDto>(studentModelFromRepo);
             patchDoc.ApplyTo(studentToPatch, ModelState);
-            if (!TryValidateModel(studentToPatch)) 
+            if (!TryValidateModel(studentToPatch))
             {
                 return ValidationProblem(ModelState);
             }
@@ -101,8 +113,8 @@ namespace SMSYS.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize]
-        public ActionResult DeleteStudent(int id) 
+
+        public ActionResult DeleteStudent(int id)
         {
             var studentModelFromRepo = _repository.GetStudentById(id);
             if (studentModelFromRepo == null)

@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace SMSYS.Controllers
 {
-    [Authorize]
+
     [Route("api/results")]
     [ApiController]
     public class ResultController : ControllerBase
@@ -25,7 +25,7 @@ namespace SMSYS.Controllers
         }
 
 
-        [Authorize]
+      
         [HttpGet]
         public ActionResult<IEnumerable<Result>> GetResults()
         {
@@ -35,7 +35,7 @@ namespace SMSYS.Controllers
         }
 
 
-        [Authorize]
+       
         [HttpGet("{id}", Name = "GetResultById")]
         public ActionResult<IEnumerable<ResultReadDto>> GetResultById(int id)
         {
@@ -49,7 +49,7 @@ namespace SMSYS.Controllers
         }
 
 
-        [Authorize]
+
         [HttpPost]
         public ActionResult<ResultReadDto> CreateResult(ResultCreateDto resultCreateDto)
         {
@@ -63,7 +63,6 @@ namespace SMSYS.Controllers
         }
 
 
-        [Authorize]
         [HttpPut("{id}")]
         public ActionResult UpdateResult(int id, ResultUpdateDto resultUpdateDto)
         {
@@ -82,7 +81,7 @@ namespace SMSYS.Controllers
         }
 
 
-        [Authorize]
+       
         [HttpPatch("{id}")]
 
         public ActionResult PartialResultUpdate(int id, JsonPatchDocument<ResultUpdateDto> patchDoc)
@@ -107,7 +106,7 @@ namespace SMSYS.Controllers
         }
 
 
-        [Authorize]
+        
         [HttpDelete("{id}")]
         public ActionResult DeleteResult(int id)
         {

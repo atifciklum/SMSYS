@@ -1,4 +1,5 @@
-﻿using SMSYS.Models;
+﻿using SMSYS.Dtos;
+using SMSYS.Models;
 namespace SMSYS.Data
 {
     public interface IExamRepo
@@ -9,5 +10,7 @@ namespace SMSYS.Data
         void CreateExam(Exam exam);
         void UpdateExam(Exam exam);
         void DeleteExam(Exam exam);
+
+        IEnumerable<StudentResultDto> getAllStudentResultsByExamId(int id);
     }
 }

@@ -1,4 +1,5 @@
-﻿using SMSYS.Models;
+﻿using SMSYS.Dtos;
+using SMSYS.Models;
 namespace SMSYS.Data
 {
     public interface IStudentRepo
@@ -7,6 +8,8 @@ namespace SMSYS.Data
         IEnumerable<Student> GetStudents();
         Student GetStudentById(int id);
         void CreateStudent(Student student);
+
+        IEnumerable<StudentResultDto> GetStudentResults();
         void UpdateStudent(Student student);
         void DeleteStudent(Student student);
     }

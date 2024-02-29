@@ -44,6 +44,9 @@ builder.Services.AddScoped<IExamRepo, SqlExamRepo>();
 builder.Services.AddControllers();
 builder.Services.AddScoped<ISubjectRepo, SqlSubjectRepo>();
 
+builder.Services.AddControllers();
+builder.Services.AddScoped<IClassroomRepo, SqlClassroomRepo>();
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => {
 
     options.TokenValidationParameters = new TokenValidationParameters
@@ -70,6 +73,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(options => 
+options.WithOrigins("http://localhost:4200")
+.AllowAnyMethod().AllowAnyHeader());
 
 app.UseHttpsRedirection();
 

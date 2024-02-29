@@ -21,6 +21,50 @@ namespace SMSYS.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("SMSYS.Models.Classroom", b =>
+                {
+                    b.Property<int>("Classroom_ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Classroom_ID"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Section")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Classroom_ID");
+
+                    b.ToTable("Classroom");
+                });
+
+            modelBuilder.Entity("SMSYS.Models.Classroom_Student", b =>
+                {
+                    b.Property<int>("Classroom_Student_ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Classroom_Student_ID"));
+
+                    b.Property<int>("Classroom_ID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Subject_ID")
+                        .HasColumnType("int");
+
+                    b.HasKey("Classroom_Student_ID");
+
+                    b.HasIndex("Classroom_ID");
+
+                    b.HasIndex("Subject_ID");
+
+                    b.ToTable("Classroom_Student");
+                });
+
             modelBuilder.Entity("SMSYS.Models.Exam", b =>
                 {
                     b.Property<int>("Exam_ID")
@@ -28,6 +72,9 @@ namespace SMSYS.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Exam_ID"));
+
+                    b.Property<int>("Classroom_ID")
+                        .HasColumnType("int");
 
                     b.Property<string>("Date")
                         .IsRequired()
@@ -37,10 +84,17 @@ namespace SMSYS.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Subject_ID")
+                        .HasColumnType("int");
+
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
                     b.HasKey("Exam_ID");
+
+                    b.HasIndex("Classroom_ID");
+
+                    b.HasIndex("Subject_ID");
 
                     b.ToTable("Exam");
                 });
@@ -56,13 +110,23 @@ namespace SMSYS.Migrations
                     b.Property<int>("Exam_ID")
                         .HasColumnType("int");
 
-                    b.Property<int>("Marks")
+                    b.Property<int>("Obtain_marks")
                         .HasColumnType("int");
 
                     b.Property<int>("Student_ID")
                         .HasColumnType("int");
 
+                    b.Property<int>("Subject_ID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Total_marks")
+                        .HasColumnType("int");
+
                     b.HasKey("Result_ID");
+
+                    b.HasIndex("Exam_ID");
+
+                    b.HasIndex("Student_ID");
 
                     b.ToTable("Result");
                 });
@@ -183,6 +247,63 @@ namespace SMSYS.Migrations
                     b.HasKey("Teacher_ID");
 
                     b.ToTable("Teacher");
+                });
+
+            modelBuilder.Entity("SMSYS.Models.Classroom_Student", b =>
+                {
+                    b.HasOne("SMSYS.Models.Classroom", "Classroom")
+                        .WithMany()
+                        .HasForeignKey("Classroom_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SMSYS.Models.Subject", "Subject")
+                        .WithMany()
+                        .HasForeignKey("Subject_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Classroom");
+
+                    b.Navigation("Subject");
+                });
+
+            modelBuilder.Entity("SMSYS.Models.Exam", b =>
+                {
+                    b.HasOne("SMSYS.Models.Classroom", "Classroom")
+                        .WithMany()
+                        .HasForeignKey("Classroom_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SMSYS.Models.Subject", "Subject")
+                        .WithMany()
+                        .HasForeignKey("Subject_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Classroom");
+
+                    b.Navigation("Subject");
+                });
+
+            modelBuilder.Entity("SMSYS.Models.Result", b =>
+                {
+                    b.HasOne("SMSYS.Models.Exam", "Exam")
+                        .WithMany()
+                        .HasForeignKey("Exam_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SMSYS.Models.Student", "Student")
+                        .WithMany()
+                        .HasForeignKey("Student_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Exam");
+
+                    b.Navigation("Student");
                 });
 #pragma warning restore 612, 618
         }

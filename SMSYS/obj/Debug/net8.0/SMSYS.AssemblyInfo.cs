@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SMSYS")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2edaaf648fd71b602ede52568654518dede22784")]
 [assembly: System.Reflection.AssemblyProductAttribute("SMSYS")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SMSYS")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

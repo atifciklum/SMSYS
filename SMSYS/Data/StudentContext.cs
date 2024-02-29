@@ -14,5 +14,9 @@ public class StudentContext : DbContext
     public DbSet<Result> Result { get; set; }
     public DbSet<Exam> Exam { get; set; }
     public DbSet<Subject> Subject { get; set; }
+    public DbSet<Classroom> Classroom { get; set; }
+    public DbSet<Classroom_Student> Classroom_Student { get; set; }
+
+
 
 }

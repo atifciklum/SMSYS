@@ -9,17 +9,25 @@ namespace SMSYS.Models
         [Required]
         public int Result_ID { get; set; }
 
-        [ForeignKey("Exam_ID")]
-        [Required]
-        public int Exam_ID { get; set; }
-
-        [ForeignKey("Student_ID")]
+        [ForeignKey("Student")]
         [Required]
         public int Student_ID { get; set; }
-       
-       
+        public Student Student { get; set; }
+
+   
+        public int Subject_ID { get; set; }
+  
+
+        [ForeignKey("Exam")]
         [Required]
-        public int Marks { get; set; } 
+        public int Exam_ID { get; set; }
+        public Exam Exam { get; set; }
+
+        [Required]
+        public int Obtain_marks { get; set; }
+
+        [Required]
+        public int Total_marks { get; set; } 
 
 
     }
