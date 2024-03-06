@@ -17,11 +17,28 @@ namespace SMSYS.Migrations
                     Classroom_ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Section = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Grade = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Section = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Teacher_ID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Classroom", x => x.Classroom_ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Exam",
+                columns: table => new
+                {
+                    Exam_ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Date = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Type = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Exam", x => x.Exam_ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -86,8 +103,8 @@ namespace SMSYS.Migrations
                 {
                     Classroom_Student_ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Classroom_ID = table.Column<int>(type: "int", nullable: false),
-                    Subject_ID = table.Column<int>(type: "int", nullable: false)
+                    Student_ID = table.Column<int>(type: "int", nullable: false),
+                    Classroom_ID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -99,39 +116,10 @@ namespace SMSYS.Migrations
                         principalColumn: "Classroom_ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Classroom_Student_Subject_Subject_ID",
-                        column: x => x.Subject_ID,
-                        principalTable: "Subject",
-                        principalColumn: "Subject_ID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Exam",
-                columns: table => new
-                {
-                    Exam_ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Subject_ID = table.Column<int>(type: "int", nullable: false),
-                    Classroom_ID = table.Column<int>(type: "int", nullable: false),
-                    Date = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Type = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Exam", x => x.Exam_ID);
-                    table.ForeignKey(
-                        name: "FK_Exam_Classroom_Classroom_ID",
-                        column: x => x.Classroom_ID,
-                        principalTable: "Classroom",
-                        principalColumn: "Classroom_ID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Exam_Subject_Subject_ID",
-                        column: x => x.Subject_ID,
-                        principalTable: "Subject",
-                        principalColumn: "Subject_ID",
+                        name: "FK_Classroom_Student_Student_Student_ID",
+                        column: x => x.Student_ID,
+                        principalTable: "Student",
+                        principalColumn: "Student_ID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -141,9 +129,9 @@ namespace SMSYS.Migrations
                 {
                     Result_ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Exam_ID = table.Column<int>(type: "int", nullable: false),
                     Student_ID = table.Column<int>(type: "int", nullable: false),
                     Subject_ID = table.Column<int>(type: "int", nullable: false),
-                    Exam_ID = table.Column<int>(type: "int", nullable: false),
                     Obtain_marks = table.Column<int>(type: "int", nullable: false),
                     Total_marks = table.Column<int>(type: "int", nullable: false)
                 },
@@ -162,6 +150,12 @@ namespace SMSYS.Migrations
                         principalTable: "Student",
                         principalColumn: "Student_ID",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Result_Subject_Subject_ID",
+                        column: x => x.Subject_ID,
+                        principalTable: "Subject",
+                        principalColumn: "Subject_ID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -170,19 +164,9 @@ namespace SMSYS.Migrations
                 column: "Classroom_ID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Classroom_Student_Subject_ID",
+                name: "IX_Classroom_Student_Student_ID",
                 table: "Classroom_Student",
-                column: "Subject_ID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Exam_Classroom_ID",
-                table: "Exam",
-                column: "Classroom_ID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Exam_Subject_ID",
-                table: "Exam",
-                column: "Subject_ID");
+                column: "Student_ID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Result_Exam_ID",
@@ -193,6 +177,11 @@ namespace SMSYS.Migrations
                 name: "IX_Result_Student_ID",
                 table: "Result",
                 column: "Student_ID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Result_Subject_ID",
+                table: "Result",
+                column: "Subject_ID");
         }
 
         /// <inheritdoc />
@@ -208,13 +197,13 @@ namespace SMSYS.Migrations
                 name: "Teacher");
 
             migrationBuilder.DropTable(
+                name: "Classroom");
+
+            migrationBuilder.DropTable(
                 name: "Exam");
 
             migrationBuilder.DropTable(
                 name: "Student");
-
-            migrationBuilder.DropTable(
-                name: "Classroom");
 
             migrationBuilder.DropTable(
                 name: "Subject");

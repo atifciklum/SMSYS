@@ -45,48 +45,46 @@ namespace SMSYS.Data
 
         }
 
-       public IEnumerable<ClassroomResultDto> getStudentResultsByClassroomId(int classroomId)
+       public IEnumerable<ClassroomResultDto> getStudentResultsByClassroomId(int classId)
         {
-            var classroomResultDto =(from std in _context.Student join )
 
-       /*     var classroomResultDto = (from result in _context.Result
-                                      join exam in _context.Exam on result.Exam_ID equals exam.Exam_ID
-                                      join cls in _context.Classroom on exam.Classroom_ID equals cls.Classroom_ID
-                                      join std in _context.Student on result.Student_ID equals std.Student_ID
-                                      where exam.Classroom_ID == classroomId 
-                                      orderby result.Student_ID
-                                      group result by new { cls.Classroom_ID, cls.Name } into g
-                                      select new ClassroomResultDto
+            var studentResults = (from result in _context.Result
+                                  join student in _context.Student on result.Student_ID equals student.Student_ID
+                                  join exam in _context.Exam on result.Exam_ID equals exam.Exam_ID
+                                  join subject in _context.Subject on result.Subject_ID equals subject.Subject_ID
+                                  where _context.Classroom_Student
+                                        .Where(cs => cs.Classroom_ID == classId)
+                                        .Select(cs => cs.Student_ID)
+                                        .Contains(result.Student_ID)
+                                  group new  { result, student, exam } by new { student.Student_ID, student.Name, student.Email, student.DOB, student.Address } into studentGroup
+                                  select new ClassroomResultDto
+                                  {
+                                      Classroom_ID = classId,
+                                      StudentDetails = studentGroup.Select(sg => new ClassStudentsDtos
                                       {
-                                          Classroom_ID = g.Key.Classroom_ID,
-                                          Classroom_Name = g.Key.Name,
-                                          StudentDetails = g.Select(r => new ClassStudentsDtos
+                                          Student_ID = sg.student.Student_ID,
+                                          Name = sg.student.Name,
+                                          Email = sg.student.Email,
+                                          DOB = sg.student.DOB,
+                                          Address = sg.student.Address,
+                                          studentResult = studentGroup.Select(s => new StudentResultDto
                                           {
-                                              Student_ID = r.Student_ID,
-                                              Name = r.Student.Name,
-                                              Email = r.Student.Email,
-                                              DOB = r.Student.DOB,
-                                              Address = r.Student.Address,
-                                              studentResult = g.Select(sr => new StudentResultDto 
+                                              Result_ID = s.result.Result_ID,
+                                              ExamDetail = new ExamReadDtos
                                               {
-                                                  ExamDetail = new ExamReadDtos
-                                                  {
-                                                      Exam_ID = r.Exam_ID,
-                                                      Date = r.Exam.Date,
-                                                      Name = r.Exam.Name,
-                                                      Type = r.Exam.Type,
-                                                  },
-                                                  Percentage = r.Total_marks != 0 ? Math.Round((double)r.Obtain_marks / r.Total_marks * 100, 2).ToString("0.00") + "%" : "0.00%",
-                                                  Obtain_marks = r.Obtain_marks,
-                                                  Total_marks = r.Total_marks
+                                                  Exam_ID = s.exam.Exam_ID,
+                                                  Date = s.exam.Date,
+                                                  Name = s.exam.Name,
+                                                  Type = s.exam.Type
+                                              },
+                                            
+                                              Obtain_marks = s.result.Obtain_marks,
+                                              Total_marks = s.result.Total_marks
+                                          }).Distinct().ToList(),
+                                      }).ToList(),
+                                  }).ToList();
 
-
-                                              }).ToList(),
-
-                                        }).ToList()
-                                      }).ToList();*/
-
-            return classroomResultDto;
+            return studentResults;
 
         }
     }

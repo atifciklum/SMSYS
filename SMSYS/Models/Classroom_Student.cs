@@ -9,15 +9,17 @@ namespace SMSYS.Models
         [Key]
         public int Classroom_Student_ID { get; set; }
 
+        [ForeignKey("Student")]
+        [Required]
+        public int Student_ID { get; set; }
+        public Student Student { get; set; }
+
         [ForeignKey("Classroom")]
         [Required]
         public int Classroom_ID { get; set; }
-
         public  Classroom Classroom { get; set; }
 
-        [ForeignKey("Subject")]
-        [Required]
-        public int Subject_ID { get; set; }
-        public Subject Subject { get; set; }
+
+      
     }
 }
